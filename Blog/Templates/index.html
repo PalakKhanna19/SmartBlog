@@ -2,36 +2,139 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>SmartBlog</title>
+    <style>
+
+           body{
+            background-image:url("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQm_r4HWZsU5z5eNAWx2rJG398M9s9Rr8TQoevqBywmscrfStO5kQ");
+            background-size:cover;
+            background-position :centre;
+
+            }
+              h1{
+         margin-left:500px;
+          color:white;
+           font-family: Georgia, Serif;
+           font-size: 50px;
+
+         }
+
+
+        .user{
+            color:white;
+            margin:10px 550px 10px 150px;
+            text-allign:center;
+            font-size:28px;
+            }
+
+
+
+         .name{
+            color:white;
+            margin:10px 550px 10px 150px;
+            text-allign:center;
+            font-size:28px;}
+
+
+         .mail{
+            color:white;
+           margin:10px 550px 10px 150px;
+            text-allign:center;
+            font-size:28px;}
+
+         .class{
+            color:white;
+            margin:10px 550px 10px 150px;
+            text-allign:center;
+            font-size:28px;}
+
+         .pass{
+            color:white;
+           margin:10px 550px 10px 150px;
+            text-allign:center;
+            font-size:28px;}
+
+         .login{
+            color:white;
+            margin:20px 550px 10px 150px;
+            text-allign:center;
+            font-size:28px;
+            }
+
+
+
+    
+             input[type="submit"]
+            {
+           margin:20px 850px 10px 350px;
+           background:white;
+           font-size:28px;
+            color:black;
+             font-family: Georgia, Serif;
+             border:100px;
+
+
+
+
+
+
+
+           }
+
+        }
+            }
+
+    </style>
+
 </head>
 <body>
 
 </body>
- <form method="post">
 
-    <div>
-        <label for="username">Username: </label>
+ <form method="post">
+      {% csrf_token %}
+     <h1>
+         Blog-it-All!!
+     </h1>
+
+
+    <div class="user">
+        <label for="username">Username </label>
         <input id="username" type="text" name="username" value={{ username }}>
     </div>
 
-    <div>
+    <div class="name">
         <label for="name">Name: </label>
         <input id="name" type="text" name="name" value={{ name }}>
     </div>
 
-    <div>
+    <div class="mail">
         <label for="email">Email: </label>
         <input id="email" type="text" name="email" value={{ email }}>
     </div>
 
-    <div>
+    <div class="pass">
         <label for="password">Password: </label>
         <input id="password" type="password" name="password" value={{ password }}>
     </div>
 
-    <input type="submit" value="Sign Up">
+
+
+
+
+
+          <input type="submit" value="Sign Up">
+
+
+
+
 
 </form>
+
+
+ </div ><br><br>
+
+    <div class="login"><h3>Already a user?</h3><a href="login/">Login</a> </div>
 
 
 </html>
