@@ -5,11 +5,21 @@ from django.contrib.auth.hashers import make_password, check_password
 from datetime import timedelta
 from django.utils import timezone
 from SmartBlog.settings import BASE_DIR
+from clarifai.rest import ClarifaiApp
+import json
+import codecs
+
 
 from imgurpython import ImgurClient
 
+import sendgrid
+
+from sendgrid.helpers.mail import *
+
 YOUR_CLIENT_ID='b3d706ef096a8de'
 YOUR_CLIENT_SECRET='5100b746cc6c2607712addaf1c3c3fb0d96a0f0f'
+SENDGRID_API_KEY='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'
+
 
 
 
@@ -19,14 +29,27 @@ def signup_view(request):
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
-            name = form.cleaned_data['name']
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
+            if(len(form.cleaned_data['username'])<5):
+                return render(request,'invalid.html')
+            else:
+                username = form.cleaned_data['username']
+                name = form.cleaned_data['name']
+                email = form.cleaned_data['email']
+                password = form.cleaned_data['password']
             # saving data to DB
-            user = UserModel(name=name, password=make_password(password), email=email, username=username)
-            user.save()
-            return render(request, 'success.html')
+                user = UserModel(name=name, password=make_password(password), email=email, username=username)
+                user.save()
+                sg = sendgrid.SendGridAPIClient(apikey=(SENDGRID_API_KEY))
+                from_email = Email("khannapalak19@gmail.com")
+                to_email = Email(form.cleaned_data['email'])
+                subject = "Welcome to Smartblog"
+                content = Content("text/plain", "Team Smartblog welcomes you!\n We hope you enjoy sharing your precious moments blogging them /n")
+                mail = Mail(from_email, subject, to_email, content)
+                response = sg.client.mail.send.post(request_body=mail.get())
+                print(response.status_code)
+                print(response.body)
+                print(response.headers)
+                return render(request, 'success.html')
             # return redirect('login/')
     else:
         form = SignUpForm()
@@ -77,6 +100,20 @@ def post_view(request):
 
                 client = ImgurClient(YOUR_CLIENT_ID, YOUR_CLIENT_SECRET)
                 post.image_url = client.upload_from_path(path, anon=True)['link']
+                app = ClarifaiApp(api_key='c0d6dcc72a5f490b8a1f0df33bf2f272')
+                model = app.models.get("general-v1.3")
+                response=model.predict_by_url(url=post.image_url)
+
+                file_name = 'output' + '.json'
+
+                for json_dict in response:
+                    for key, value in response.iteritems():
+                        print("key: {} | value: {}".format(key, value))
+
+
+
+
+
                 post.save()
 
                 return redirect('/feed/')
