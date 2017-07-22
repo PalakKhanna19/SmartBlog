@@ -7,14 +7,14 @@ from django.utils import timezone
 from SmartBlog.settings import BASE_DIR
 from clarifai.rest import ClarifaiApp
 from Blog.keys import YOUR_CLIENT_ID,YOUR_CLIENT_SECRET,SENDGRID_API_KEY
+
 import json
 import codecs
 
 
+
 from imgurpython import ImgurClient
-
 import sendgrid
-
 from sendgrid.helpers.mail import *
 
 
@@ -99,14 +99,16 @@ def post_view(request):
                 client = ImgurClient(YOUR_CLIENT_ID, YOUR_CLIENT_SECRET)
                 post.image_url = client.upload_from_path(path, anon=True)['link']
                 app = ClarifaiApp(api_key='c0d6dcc72a5f490b8a1f0df33bf2f272')
-                model = app.models.get("general-v1.3")
-                response=model.predict_by_url(url=post.image_url)
 
-                file_name = 'output' + '.json'
+              #  app = ClarifaiApp(api_key='c0d6dcc72a5f490b8a1f0df33bf2f272')
+               # model = app.models.get("general-v1.3")
+                #response=model.predict_by_url(url=post.image_url)
 
-                for json_dict in response:
-                    for key, value in response.iteritems():
-                        print("key: {} | value: {}".format(key, value))
+                #file_name = 'output' + '.json'
+
+                #for json_dict in response:
+                    #for key, value in response.iteritems():
+                        #print("key: {} | value: {}".format(key, value))
 
 
 
@@ -121,6 +123,29 @@ def post_view(request):
         return render(request, 'post.html', {'form': form})
     else:
         return redirect('/login/')
+
+
+def add_category(post):
+    app = ClarifaiApp(api_key='c0d6dcc72a5f490b8a1f0df33bf2f272')
+    model = app.models.get("general-v1.3")
+    response = model.predict_by_url(url=post.image_url)
+    if response["status"]["code"]==10000:
+        if response["outputs"]:
+            if response["output"][0]["data"]:
+                if response["output"][0]["data"]["concepts"]:
+                    for index in range (0,len(response)["outputs"][0]["data"]["concepts"]):
+                        category=Category.Models(post=post,category_text=response['outputs'][0]['data']['concepts'][index]['name'])
+                        print response
+                        category.save()
+                else:
+                    print 'no concepts error'
+            else:
+                print 'no data list error'
+        else:
+            print 'no outtput list error'
+    else:
+        print 'response code error'
+
 
 
 def feed_view(request):
@@ -146,7 +171,21 @@ def like_view(request):
         form = LikeForm(request.POST)
         if form.is_valid():
             post_id = form.cleaned_data.get('post').id
+
             existing_like = LikeModel.objects.filter(post_id=post_id, user=user).first()
+            like = LikeModel.objects.create(post_id=post_id, user=user)
+            sg = sendgrid.SendGridAPIClient(apikey=(SENDGRID_API_KEY))
+            from_email = Email("khannapalak19@gmail.com")
+            to_email = Email(like.post.user.email)
+            subject = "Welcome to Smartblog"
+            content = Content("text/plain",
+                              "Team Smartblog welcomes you!\n We hope you enjoy sharing your precious moments blogging them /n")
+            mail = Mail(from_email, subject, to_email, content)
+            response = sg.client.mail.send.post(request_body=mail.get())
+            print(response.status_code)
+            print(response.body)
+            print(response.headers)
+
             if not existing_like:
                 LikeModel.objects.create(post_id=post_id, user=user)
             else:
@@ -165,6 +204,17 @@ def comment_view(request):
             comment_text = form.cleaned_data.get('comment_text')
             comment = CommentModel.objects.create(user=user, post_id=post_id, comment_text=comment_text)
             comment.save()
+            sg = sendgrid.SendGridAPIClient(apikey=(SENDGRID_API_KEY))
+            from_email = Email("khannapalak19@gmail.com")
+            to_email = Email(comment.post.user.email)
+            subject = "Welcome to Smartblog"
+            content = Content("text/plain",
+                              "Team Smartblog welcomes you!\n We hope you enjoy sharing your precious moments blogging them /n")
+            mail = Mail(from_email, subject, to_email, content)
+            response = sg.client.mail.send.post(request_body=mail.get())
+            print(response.status_code)
+            print(response.body)
+            print(response.headers)
             return redirect('/feed/')
         else:
             return redirect('/feed/')

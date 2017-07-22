@@ -9,9 +9,11 @@ class UserModel(models.Model):
 	email = models.EmailField()
 	name = models.CharField(max_length=120)
 	username = models.CharField(max_length=120)
-	password = models.CharField(max_length=40)
+	password = models.CharField(max_length=50)
 	created_on = models.DateTimeField(auto_now_add=True)
 	updated_on = models.DateTimeField(auto_now=True)
+
+
 
 class SessionToken(models.Model):
 	user = models.ForeignKey(UserModel)
@@ -44,8 +46,11 @@ class PostModel(models.Model):
 class LikeModel(models.Model):
 	user = models.ForeignKey(UserModel)
 	post = models.ForeignKey(PostModel)
+
+
 	created_on = models.DateTimeField(auto_now_add=True)
 	updated_on = models.DateTimeField(auto_now=True)
+
 
 
 class CommentModel(models.Model):
