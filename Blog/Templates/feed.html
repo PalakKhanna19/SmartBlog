@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>YourFeed</title>
 </head>
 <body>
     <form method="post" action="/post/">
@@ -10,6 +10,11 @@
 
         <input type="submit" class="btn-default btn" value="Create Post">
     </form>
+      <form method="post" action="/login/">
+          {%csrf_token%}
+      <input type="submit" class="btn-default btn" value="Logout">
+          </form>
+
 
 
     {% for post in posts %}
@@ -35,6 +40,18 @@
             </form>
         </div>
 
+
+        <div>
+            <p>
+                Categories
+            </p>
+            {% for category in post.category %}
+            <span>{{category.category_text}}</span>
+            {% endfor %}
+
+
+        </div>
+
         <div>
             <form method="POST" action="/comment/">
                 {% csrf_token %}
@@ -43,6 +60,7 @@
                 <input type="text" name="comment_text" id="comment_text" placeholder="Make a comment.." value="{{ comment_text }}">
                 {{ comment_text }}
                 <input type="submit" class="btn-default btn" value="Comment">
+
             </form>
         </div>
 
