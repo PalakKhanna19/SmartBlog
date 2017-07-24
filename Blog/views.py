@@ -1,3 +1,5 @@
+#imported all the below statements
+
 from django.shortcuts import render, redirect
 from forms import SignUpForm, LoginForm, PostForm, LikeForm, CommentForm
 from models import UserModel, SessionToken, PostModel, LikeModel, CommentModel,CategoryModel
@@ -21,7 +23,9 @@ from sendgrid.helpers.mail import *
 
 
 
-# Create your views here.
+# Create your views her
+#signup view has the functionality of signing up for a new user
+#it also sends a welcome email via sendgrid
 
 def signup_view(request):
     if request.method == "POST":
@@ -34,7 +38,7 @@ def signup_view(request):
                 name = form.cleaned_data['name']
                 email = form.cleaned_data['email']
                 password = form.cleaned_data['password']
-            # saving data to DB
+                # saving data to DB
                 user = UserModel(name=name, password=make_password(password), email=email, username=username)
                 user.save()
                 sg = sendgrid.SendGridAPIClient(apikey=(SENDGRID_API_KEY))
@@ -48,13 +52,14 @@ def signup_view(request):
                 print(response.body)
                 print(response.headers)
                 return render(request, 'success.html')
-            # return redirect('login/')
+                # return redirect('login/')
     else:
         form = SignUpForm()
 
     return render(request, 'index.html' , {'form': form})
 
-
+#Login view lets the old user login using username and password
+#It creates a session token
 def login_view(request):
     response_data = {}
     if request.method == "POST":
@@ -81,7 +86,7 @@ def login_view(request):
     response_data['form'] = form
     return render(request, 'login.html', response_data)
 
-
+#Post view lets the user post the picture with a  caption
 def post_view(request):
     user = check_validation(request)
 
@@ -100,15 +105,15 @@ def post_view(request):
                 post.image_url = client.upload_from_path(path, anon=True)['link']
                 app = ClarifaiApp(api_key='c0d6dcc72a5f490b8a1f0df33bf2f272')
 
-              #  app = ClarifaiApp(api_key='c0d6dcc72a5f490b8a1f0df33bf2f272')
-               # model = app.models.get("general-v1.3")
-                #response=model.predict_by_url(url=post.image_url)
+                app = ClarifaiApp(api_key='c0d6dcc72a5f490b8a1f0df33bf2f272')
+                model = app.models.get("general-v1.3")
+                response=model.predict_by_url(url=post.image_url)
 
-                #file_name = 'output' + '.json'
+                file_name = 'output' + '.json'
 
-                #for json_dict in response:
-                    #for key, value in response.iteritems():
-                        #print("key: {} | value: {}".format(key, value))
+                for json_dict in response:
+                    for key, value in response.iteritems():
+                        print("key: {} | value: {}".format(key, value))
 
 
 
@@ -124,7 +129,7 @@ def post_view(request):
     else:
         return redirect('/login/')
 
-
+#This lets you add the category tags to your post automatically!
 def add_category(post):
     app = ClarifaiApp(api_key='c0d6dcc72a5f490b8a1f0df33bf2f272')
     model = app.models.get("general-v1.3")
@@ -146,7 +151,7 @@ def add_category(post):
         print 'response code error'
 
 
-
+#Feed view displays all the posts with captions,commentx and the number of likes on it
 def feed_view(request):
     user = check_validation(request)
     if user:
@@ -163,7 +168,7 @@ def feed_view(request):
 
         return redirect('/login/')
 
-
+#Like model lets you like and umlike the post
 def like_view(request):
     user = check_validation(request)
     if user and request.method == 'POST':
@@ -194,7 +199,7 @@ def like_view(request):
     else:
         return redirect('/login/')
 
-
+#Comment view lets the user comment on the post
 def comment_view(request):
     user = check_validation(request)
     if user and request.method == 'POST':
@@ -227,12 +232,13 @@ def check_validation(request):
     if request.COOKIES.get('session_token'):
         session = SessionToken.objects.filter(session_token=request.COOKIES.get('session_token')).first()
         if session:
-             time_to_live = session.created_on + timedelta(days=1)
-            if time_to_live > timezone.now():
-                return session.user
+            time_to_live = session.created_on + timedelta(days=1)
+        if time_to_live > timezone.now():
+            return session.user
     else:
         return None
 
+#For deleting the session and logging out
 def logout_view(request):
     request.session.modified= True
     response=redirect('/login/')
