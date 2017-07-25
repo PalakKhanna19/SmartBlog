@@ -30,28 +30,32 @@ from sendgrid.helpers.mail import *
 def signup_view(request):
     if request.method == "POST":
         form = SignUpForm(request.POST)
+        #pass1=str(form.cleaned_data['password'])
         if form.is_valid():
-            if(len(form.cleaned_data['username'])<5):
+            if(len(form.cleaned_data['username'])<5 or set('[~!#$%^&*()_+{}":;\']+$ " "').intersection(form.cleaned_data['username'])):
                 return render(request,'invalid.html')
             else:
-                username = form.cleaned_data['username']
-                name = form.cleaned_data['name']
-                email = form.cleaned_data['email']
-                password = form.cleaned_data['password']
+                if (len(form.cleaned_data["password"])>5):
+                    username = form.cleaned_data['username']
+                    name = form.cleaned_data['name']
+                    email = form.cleaned_data['email']
+                    password = form.cleaned_data['password']
                 # saving data to DB
-                user = UserModel(name=name, password=make_password(password), email=email, username=username)
-                user.save()
-                sg = sendgrid.SendGridAPIClient(apikey=(SENDGRID_API_KEY))
-                from_email = Email("khannapalak19@gmail.com")
-                to_email = Email(form.cleaned_data['email'])
-                subject = "Welcome to Smartblog"
-                content = Content("text/plain", "Team Smartblog welcomes you!\n We hope you enjoy sharing your precious moments blogging them /n")
-                mail = Mail(from_email, subject, to_email, content)
-                response = sg.client.mail.send.post(request_body=mail.get())
-                print(response.status_code)
-                print(response.body)
-                print(response.headers)
-                return render(request, 'success.html')
+                    user = UserModel(name=name, password=make_password(password), email=email, username=username)
+                    user.save()
+                    sg = sendgrid.SendGridAPIClient(apikey=(SENDGRID_API_KEY))
+                    from_email = Email("khannapalak19@gmail.com")
+                    to_email = Email(form.cleaned_data['email'])
+                    subject = "Welcome to Smartblog"
+                    content = Content("text/plain", "Team Smartblog welcomes you!\n We hope you enjoy sharing your precious moments blogging them /n")
+                    mail = Mail(from_email, subject, to_email, content)
+                    response = sg.client.mail.send.post(request_body=mail.get())
+                    print(response.status_code)
+                    print(response.body)
+                    print(response.headers)
+                    return render(request, 'success.html')
+                else:
+                    return render(request, 'invalid.html')
                 # return redirect('login/')
     else:
         form = SignUpForm()
