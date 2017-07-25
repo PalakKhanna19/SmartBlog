@@ -82,7 +82,7 @@ def login_view(request):
                     response.set_cookie(key='session_token', value=token.session_token)
                     return response
                 else:
-                    response_data['message'] = 'Incorrect Password! Please try again!'
+                    return render(request, 'invalidlogin.html')
 
     elif request.method == 'GET':
         form = LoginForm()
