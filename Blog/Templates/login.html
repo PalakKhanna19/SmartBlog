@@ -3,6 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>LOGIN</title>
+    <style>
+    body{
+             background-image:url("http://dansplainephoto.com/wp-content/uploads/2013/04/IMG_2605.jpg");
+             background-size:cover;
+            background-position :centre;
+            }
+    .login{
+    width: 400px;
+    height: 200px;
+    padding: 40px;
+    border: 2px solid black;
+background-color:rgba(0,0,0,0.6);
+margin:200px 0px 200px 150px ;
+border-radius:20%;
+color:white;}
+#username{
+font-size:20px;
+margin-bottom:10px;}
+#password
+{font-size:20px;
+margin-bottom:10px;
+}
+input[type="submit"] {
+      background: red;
+      color: white;
+      margin-left:300px;
+      font-size:25px;
+    }
+
+    </style>
 </head>
 <body>
 
@@ -10,19 +40,20 @@
 <form method="post">
     {% csrf_token %}
 
+    <div class="login">
 
       <div>
-          <label for="username">Username: </label>
-          <input id="username" type="text" name="username" value={{ username }}>
+            <input id="username" type="text"name="username"placeholder="Username" value={{ username }} >
       </div>
 
       <div>
-          <label for="password">Password: </label>
-          <input id="password" type="password" name="password" value={{ password }}>
+          <input id="password" type="password" name="password" placeholder="Password" value={{ password }}>
       </div>
 
       <input type="submit" value="Log In">
+        </div>
 
     </form>
+
 </body>
 </html>

@@ -1,0 +1,167 @@
+{
+  "status": {
+    "code": 10000, 
+    "description": "Ok"
+  }, 
+  "outputs": [
+    {
+      "status": {
+        "code": 10000, 
+        "description": "Ok"
+      }, 
+      "created_at": "2017-07-20T09:08:51.881928562Z", 
+      "input": {
+        "data": {
+          "image": {
+            "url": "http://i.imgur.com/zVhSPoP.jpg"
+          }
+        }, 
+        "id": "de5960f4af55492d96565ba76eaa3de3"
+      }, 
+      "model": {
+        "name": "general-v1.3", 
+        "output_info": {
+          "type_ext": "concept", 
+          "message": "Show output_info with: GET /models/{model_id}/output_info", 
+          "type": "concept"
+        }, 
+        "created_at": "2016-03-09T17:11:39.608845Z", 
+        "app_id": "main", 
+        "model_version": {
+          "status": {
+            "code": 21100, 
+            "description": "Model trained successfully"
+          }, 
+          "created_at": "2016-07-13T01:19:12.147644Z", 
+          "id": "aa9ca48295b37401f8af92ad1af0d91d"
+        }, 
+        "id": "aaa03c23b3724a16a56b629203edc62c"
+      }, 
+      "data": {
+        "concepts": [
+          {
+            "app_id": "main", 
+            "id": "ai_XclQc6bP", 
+            "value": 0.98304826, 
+            "name": "traditional"
+          }, 
+          {
+            "app_id": "main", 
+            "id": "ai_L83krFdq", 
+            "value": 0.9667145, 
+            "name": "veil"
+          }, 
+          {
+            "app_id": "main", 
+            "id": "ai_L92T2QtK", 
+            "value": 0.9649413, 
+            "name": "decoration"
+          }, 
+          {
+            "app_id": "main", 
+            "id": "ai_RQccV41p", 
+            "value": 0.96450865, 
+            "name": "woman"
+          }, 
+          {
+            "app_id": "main", 
+            "id": "ai_djRqCRT8", 
+            "value": 0.9569601, 
+            "name": "culture"
+          }, 
+          {
+            "app_id": "main", 
+            "id": "ai_l8TKp2h5", 
+            "value": 0.95624495, 
+            "name": "people"
+          }, 
+          {
+            "app_id": "main", 
+            "id": "ai_13NdwKqz", 
+            "value": 0.94786716, 
+            "name": "festival"
+          }, 
+          {
+            "app_id": "main", 
+            "id": "ai_358VqvJT", 
+            "value": 0.94357246, 
+            "name": "religion"
+          }, 
+          {
+            "app_id": "main", 
+            "id": "ai_7BvCb8lC", 
+            "value": 0.9402393, 
+            "name": "costume"
+          }, 
+          {
+            "app_id": "main", 
+            "id": "ai_R34DhbJv", 
+            "value": 0.9350977, 
+            "name": "dress"
+          }, 
+          {
+            "app_id": "main", 
+            "id": "ai_TJ9wFfK5", 
+            "value": 0.9336653, 
+            "name": "portrait"
+          }, 
+          {
+            "app_id": "main", 
+            "id": "ai_dngMN46t", 
+            "value": 0.9209117, 
+            "name": "fashion"
+          }, 
+          {
+            "app_id": "main", 
+            "id": "ai_JBPqff8z", 
+            "value": 0.92031527, 
+            "name": "art"
+          }, 
+          {
+            "app_id": "main", 
+            "id": "ai_7qwGxLch", 
+            "value": 0.91861165, 
+            "name": "gold"
+          }, 
+          {
+            "app_id": "main", 
+            "id": "ai_xQbBc1zb", 
+            "value": 0.9137553, 
+            "name": "girl"
+          }, 
+          {
+            "app_id": "main", 
+            "id": "ai_vz98nDK9", 
+            "value": 0.9132208, 
+            "name": "beautiful"
+          }, 
+          {
+            "app_id": "main", 
+            "id": "ai_wZCn67qV", 
+            "value": 0.9051964, 
+            "name": "style"
+          }, 
+          {
+            "app_id": "main", 
+            "id": "ai_8jtPl3Xj", 
+            "value": 0.90095866, 
+            "name": "face"
+          }, 
+          {
+            "app_id": "main", 
+            "id": "ai_0JbWBDPd", 
+            "value": 0.89974463, 
+            "name": "color"
+          }, 
+          {
+            "app_id": "main", 
+            "id": "ai_c1zPpkcF", 
+            "value": 0.8983348, 
+            "name": "jewelry"
+          }
+        ]
+      }, 
+      "id": "a85f023ebb50457fb5ecba8ab35924fa"
+    }
+  ]
+}

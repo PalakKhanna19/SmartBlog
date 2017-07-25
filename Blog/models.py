@@ -15,6 +15,10 @@ class UserModel(models.Model):
 
 
 
+
+
+
+
 class SessionToken(models.Model):
 	user = models.ForeignKey(UserModel)
 	session_token = models.CharField(max_length=255)
@@ -29,6 +33,7 @@ class PostModel(models.Model):
 	user = models.ForeignKey(UserModel)
 	image = models.FileField(upload_to='user_images')
 	image_url = models.CharField(max_length=255)
+
 	caption = models.CharField(max_length=240)
 	created_on = models.DateTimeField(auto_now_add=True)
 	updated_on = models.DateTimeField(auto_now=True)
@@ -42,6 +47,17 @@ class PostModel(models.Model):
 	@property
 	def comments(self):
 		return CommentModel.objects.filter(post=self).order_by('-created_on')
+
+
+class CategoryModel(models.Model):
+	user = models.ForeignKey(UserModel)
+	post = models.ForeignKey(PostModel)
+	category_text=models.CharField(max_length=255)
+
+	@property
+	def category(self):
+		return CategoryModel.objects.filter(post=self)
+
 
 class LikeModel(models.Model):
 	user = models.ForeignKey(UserModel)
@@ -59,3 +75,9 @@ class CommentModel(models.Model):
 	comment_text = models.CharField(max_length=555)
 	created_on = models.DateTimeField(auto_now_add=True)
 	updated_on = models.DateTimeField(auto_now=True)
+
+
+class ObjModel(models.Model):
+    user = models.ForeignKey(UserModel)
+    image = models.FileField(upload_to='ser_images')
+    image_url = models.CharField(max_length=255)
